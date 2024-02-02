@@ -7,9 +7,26 @@ Rails.application.routes.draw do
 
   namespace :admin, defaults: { format: :json } do
     get 'home', to: 'home#index'
+
+    resources :users
+
+    resources :dashboard do
+      collection do
+        get 'total_users_number'
+      end
+    end
+
+    resources :etl do
+      collection do
+        post 'make_etl_users'
+        get 'etl_users_progress'
+      end
+    end
   end
 
   namespace :no_admin, defaults: { format: :json } do
     get 'home', to: 'home#index'
+    
+    resources :profile, only: [:show, :update, :destroy]
   end
 end
