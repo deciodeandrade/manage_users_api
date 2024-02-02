@@ -1,7 +1,7 @@
 module NoAdmin
   class ProfileController < ApiController
     def show
-      user = User.find(params[:id])
+      user = current_user
 
       json = {
         id: user.id,
@@ -14,7 +14,7 @@ module NoAdmin
     end
 
     def update
-      user = User.find(params[:id])
+      user = current_user
       user.attributes = user_params
       user.save!
 
@@ -29,7 +29,7 @@ module NoAdmin
     end
 
     def destroy
-      user = User.find(params[:id])
+      user = current_user
       user.destroy!
     end
 
