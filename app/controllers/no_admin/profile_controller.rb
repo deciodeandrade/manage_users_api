@@ -7,7 +7,8 @@ module NoAdmin
         id: user.id,
         full_name: user.full_name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar_url: user.avatar_url
       }
 
       render status: 200, json: json
@@ -22,7 +23,8 @@ module NoAdmin
         id: user.id,
         full_name: user.full_name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar_url: user.avatar_url
       }
 
       render status: 200, json: json
@@ -37,7 +39,7 @@ module NoAdmin
 
     def user_params
       return {} unless params.has_key?(:user)
-      params.require(:user).permit(:full_name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:full_name, :email, :password, :password_confirmation, :avatar_image)
     end
   end
 end

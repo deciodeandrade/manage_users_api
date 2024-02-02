@@ -7,7 +7,8 @@ module Admin
         id: user.id,
         full_name: user.full_name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar_url: user.avatar_url
       }
 
       render status: 200, json: json
@@ -21,7 +22,8 @@ module Admin
           id: item.id,
           full_name: item.full_name,
           email: item.email,
-          role: item.role
+          role: item.role,
+          avatar_url: item.avatar_url
         }
       end
 
@@ -37,7 +39,8 @@ module Admin
         id: user.id,
         full_name: user.full_name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar_url: user.avatar_url
       }
 
       render status: 200, json: json
@@ -52,7 +55,8 @@ module Admin
         id: user.id,
         full_name: user.full_name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar_url: user.avatar_url
       }
 
       render status: 200, json: json
@@ -67,7 +71,7 @@ module Admin
 
     def user_params
       return {} unless params.has_key?(:user)
-      params.require(:user).permit(:id, :full_name, :email, :password, :password_confirmation, :role)
+      params.require(:user).permit(:id, :full_name, :email, :password, :password_confirmation, :role, :avatar_image)
     end
   end
 end
