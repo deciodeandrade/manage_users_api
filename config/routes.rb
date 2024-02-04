@@ -18,8 +18,10 @@ Rails.application.routes.draw do
 
     resources :etl do
       collection do
-        post 'make_etl_users'
-        get 'etl_users_progress'
+        post 'create_import'
+        get 'create_users_from_import'
+        post 'create_import_and_users_from_import'
+        get 'import_progress'
       end
     end
   end

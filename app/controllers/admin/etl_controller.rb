@@ -1,40 +1,29 @@
 module Admin
   class EtlController < ApiController
-    require 'csv'
+    def create_import
+      import = User::Import.create!(file: params[:file])
 
-    def make_etl_users
-      response = import(params['file'].path)
-
-      render status: 200, json: response[:status]
+      render status: 200, json: import
     end
 
-    def etl_users_progress
-      #count = User.where(file_id: params['file_id']).size
+    def create_users_from_import
+      import = User::Import.find(params[:id])
+      response = import.load_data_on_database!
 
-      render status: 200#, json: count
+      render status: 200, json: response[:details]
     end
 
-    private
+    def create_import_and_users_from_import
+      import = User::Import.create(file: params[:file])
+      response = import.load_data_on_database!
 
-    def import(path)
-      errors = []
+      render status: 200, json: response[:details]
+    end
 
-      successful, failed = 0, 0
+    def import_progress
+      import = User::Import.find(params[:id])
 
-      CSV.foreach(path, headers: true) do |row|
-        begin
-          user_params = row.to_h
-          User.create!(user_params)
-          successful += 1
-        rescue StandardError => e
-          failed += 1
-          errors.push({user_params: user_params, error: e})
-        end
-      end
-
-      attempts = successful + failed
-
-      {status: {attempts: attempts, successful: successful, failed: failed}, errors: errors}
+      render status: 200, json: import.details
     end
   end
 end
