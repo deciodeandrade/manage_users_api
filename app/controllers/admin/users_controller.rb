@@ -1,51 +1,39 @@
 module Admin
   class UsersController < ApiController
     def show
-      user = User.find(params[:id])
+      user = User::List::FindItem.call(params[:id])
 
-      user_json = Users::Serializer.as_json(user)
-
-      render status: 200, json: { user: user_json }
+      render status: 200, json: { user: Users::Serializer.as_json(user) }
     end
 
     def index
-      users = User.all
+      users = User::List::FetchItems.call(user_params)
 
-      users_json = Users::Serializer.collection_as_json(users)
-
-      render status: 200, json: { users: users_json }
+      render status: 200, json: { users: Users::Serializer.collection_as_json(users) }
     end
 
     def create
-      user = User.new
-      user.attributes = user_params
-      user.save!
+      user = User::List::AddItem.call(user_params)
 
-      user_json = Users::Serializer.as_json(user)
-
-      render status: 200, json: { user: user_json }
+      render status: 200, json: { user: Users::Serializer.as_json(user), message: 'User was created with sucess.' }
     end
 
     def update
-      user = User.find(params[:id])
-      user.attributes = user_params
-      user.save!
+      user = User::List::UpdateItem.call(id: params[:id], params: user_params)
 
-      user_json = Users::Serializer.as_json(user)
-
-      render status: 200, json: { user: user_json }
+      render status: 200, json: { user: Users::Serializer.as_json(user), message: 'User was updated with sucess.' }
     end
 
     def destroy
-      user = User.find(params[:id])
-      user.destroy!
+      user = User::List::DeleteItem.call(params[:id])
+      
+      render status: 200, json: { message: 'User was deleted with sucess.' }
     end
 
     private
 
     def user_params
-      return {} unless params.has_key?(:user)
-      params.require(:user).permit(:id, :full_name, :email, :password, :password_confirmation, :role, :avatar_image)
+      Users::Params.call(params)
     end
   end
 end
