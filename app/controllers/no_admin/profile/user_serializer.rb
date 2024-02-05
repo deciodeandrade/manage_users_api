@@ -1,5 +1,5 @@
 module NoAdmin
-  class Users::Serializer
+  class Profile::UserSerializer
     def self.as_json(user)
       return user.errors.as_json if user.errors.present?
 

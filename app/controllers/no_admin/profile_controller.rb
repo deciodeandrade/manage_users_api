@@ -3,7 +3,7 @@ module NoAdmin
     def show
       user = current_user
 
-      user_json = Users::Serializer.as_json(user)
+      user_json = Profile::UserSerializer.as_json(user)
 
       render status: 200, json: { user: user_json }
     end
@@ -13,7 +13,7 @@ module NoAdmin
       user.attributes = user_params
       user.save!
 
-      user_json = Users::Serializer.as_json(user)
+      user_json = Profile::UserSerializer.as_json(user)
 
       render status: 200, json: { user: user_json }
     end
