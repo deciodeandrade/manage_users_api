@@ -3,31 +3,17 @@ module Admin
     def show
       user = User.find(params[:id])
 
-      json = {
-        id: user.id,
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-        avatar_url: user.avatar_url
-      }
+      user_json = Users::Serializer.as_json(user)
 
-      render status: 200, json: json
+      render status: 200, json: { user: user_json }
     end
 
     def index
       users = User.all
 
-      json = users.map do |item|
-        {
-          id: item.id,
-          full_name: item.full_name,
-          email: item.email,
-          role: item.role,
-          avatar_url: item.avatar_url
-        }
-      end
+      users_json = Users::Serializer.collection_as_json(users)
 
-      render status: 200, json: json
+      render status: 200, json: { users: users_json }
     end
 
     def create
@@ -35,15 +21,9 @@ module Admin
       user.attributes = user_params
       user.save!
 
-      json = {
-        id: user.id,
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-        avatar_url: user.avatar_url
-      }
+      user_json = Users::Serializer.as_json(user)
 
-      render status: 200, json: json
+      render status: 200, json: { user: user_json }
     end
 
     def update
@@ -51,15 +31,9 @@ module Admin
       user.attributes = user_params
       user.save!
 
-      json = {
-        id: user.id,
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-        avatar_url: user.avatar_url
-      }
+      user_json = Users::Serializer.as_json(user)
 
-      render status: 200, json: json
+      render status: 200, json: { user: user_json }
     end
 
     def destroy
