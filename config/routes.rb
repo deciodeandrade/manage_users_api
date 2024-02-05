@@ -30,5 +30,9 @@ Rails.application.routes.draw do
     get 'home', to: 'home#index'
     
     resources :profile, only: [:show, :update, :destroy]
+
+    get 'profile', to: 'profile#show'
+    put 'profile', to: 'profile#update'
+    delete 'profile', to: 'profile#destroy'
   end
 end

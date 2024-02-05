@@ -3,15 +3,9 @@ module NoAdmin
     def show
       user = current_user
 
-      json = {
-        id: user.id,
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-        avatar_url: user.avatar_url
-      }
+      user_json = Users::Serializer.as_json(user)
 
-      render status: 200, json: json
+      render status: 200, json: { user: user_json }
     end
 
     def update
@@ -19,15 +13,9 @@ module NoAdmin
       user.attributes = user_params
       user.save!
 
-      json = {
-        id: user.id,
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-        avatar_url: user.avatar_url
-      }
+      user_json = Users::Serializer.as_json(user)
 
-      render status: 200, json: json
+      render status: 200, json: { user: user_json }
     end
 
     def destroy
