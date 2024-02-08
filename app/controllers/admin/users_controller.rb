@@ -16,32 +16,26 @@ module Admin
       persisted, user = User::List::AddItem.call(user_params)
 
       status = persisted ? 200 : 422
-      user_json = Users::Serializer.as_json(user)
 
-      render status: status, json: { user: user_json }
+      render status: status, json: { user: Users::Serializer.as_json(user) }
     end
 
     def update
       changed, user = User::List::UpdateItem.call(id: params[:id], params: user_params)
 
       status = changed ? 200 : 422
-      user_json = Users::Serializer.as_json(user)
 
-      render status: status, json: { user: user_json }
+      render status: status, json: { user: Users::Serializer.as_json(user) }
     end
 
     def destroy
       destroyed, user = User::List::DeleteItem.call(params[:id])
 
       if destroyed
-        status = 200
-        user_json = {}
+        head :no_content
       else
-        status = 422
-        user_json = Users::Serializer.as_json(user)
+        render status: 422, json: { user: Users::Serializer.as_json(user) }
       end
-      
-      render status: status, json: { user: user_json }
     end
 
     private

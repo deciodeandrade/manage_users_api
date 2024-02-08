@@ -10,9 +10,8 @@ module NoAdmin
       changed, user = User::List::UpdateItem.call(id: current_user.id, params: user_params)
 
       status = changed ? 200 : 422
-      user_json = Profile::UserSerializer.as_json(user)
 
-      render status: status, json: { user: user_json }
+      render status: status, json: { user: Profile::UserSerializer.as_json(user) }
     end
 
     def destroy
@@ -30,11 +29,6 @@ module NoAdmin
     end
 
     private
-
-    def current_user
-      User.find 226
-    end
-    
 
     def user_params
       Profile::UserParams.call(params)
