@@ -18,14 +18,10 @@ module NoAdmin
       destroyed, user = User::List::DeleteItem.call(current_user.id)
 
       if destroyed
-        status = 200
-        user_json = {}
+        head :no_content
       else
-        status = 422
-        user_json = Profile::UserSerializer.as_json(user)
+        render status: 422, json: { user: Profile::UserSerializer.as_json(user) }
       end
-
-      render status: status, json: { user: user_json }
     end
 
     private
