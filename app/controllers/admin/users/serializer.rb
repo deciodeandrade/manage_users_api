@@ -14,7 +14,7 @@ module Admin
 
     def self.collection_as_json(users)
       users.map do |item|
-        Users::Serializer.as_json(item)
+        as_json(item)
       end
     end
   end
