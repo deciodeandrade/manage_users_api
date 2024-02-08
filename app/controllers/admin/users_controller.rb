@@ -13,21 +13,35 @@ module Admin
     end
 
     def create
-      user = User::List::AddItem.call(user_params)
+      persisted, user = User::List::AddItem.call(user_params)
 
-      render status: 200, json: { user: Users::Serializer.as_json(user), message: 'User was created with sucess.' }
+      status = persisted ? 200 : 422
+      user_json = Users::Serializer.as_json(user)
+
+      render status: status, json: { user: user_json }
     end
 
     def update
-      user = User::List::UpdateItem.call(id: params[:id], params: user_params)
+      changed, user = User::List::UpdateItem.call(id: params[:id], params: user_params)
 
-      render status: 200, json: { user: Users::Serializer.as_json(user), message: 'User was updated with sucess.' }
+      status = changed ? 200 : 422
+      user_json = Users::Serializer.as_json(user)
+
+      render status: status, json: { user: user_json }
     end
 
     def destroy
-      user = User::List::DeleteItem.call(params[:id])
+      destroyed, user = User::List::DeleteItem.call(params[:id])
+
+      if destroyed
+        status = 200
+        user_json = {}
+      else
+        status = 422
+        user_json = Users::Serializer.as_json(user)
+      end
       
-      render status: 200, json: { message: 'User was deleted with sucess.' }
+      render status: status, json: { user: user_json }
     end
 
     private
