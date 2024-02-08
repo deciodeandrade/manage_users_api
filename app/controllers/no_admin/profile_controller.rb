@@ -7,18 +7,34 @@ module NoAdmin
     end
 
     def update
-      user = User::List::UpdateItem.call(id: params[:id], params: user_params)
+      changed, user = User::List::UpdateItem.call(id: current_user.id, params: user_params)
 
-      render status: 200, json: { user: Profile::UserSerializer.as_json(user), message: 'User was updated with success.' }
+      status = changed ? 200 : 422
+      user_json = Profile::UserSerializer.as_json(user)
+
+      render status: status, json: { user: user_json }
     end
 
     def destroy
-      user = User::List::DeleteItem.call(current_user.id)
+      destroyed, user = User::List::DeleteItem.call(current_user.id)
 
-      render status: 200, json: { message: 'User was deleted with success.' }
+      if destroyed
+        status = 200
+        user_json = {}
+      else
+        status = 422
+        user_json = Profile::UserSerializer.as_json(user)
+      end
+
+      render status: 200, json: { user: user_json }
     end
 
     private
+
+    def current_user
+      User.find 226
+    end
+    
 
     def user_params
       Profile::UserParams.call(params)
