@@ -26,7 +26,7 @@ module NoAdmin
         user_json = Profile::UserSerializer.as_json(user)
       end
 
-      render status: 200, json: { user: user_json }
+      render status: status, json: { user: user_json }
     end
 
     private
